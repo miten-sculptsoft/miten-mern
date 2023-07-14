@@ -1,5 +1,41 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+const jwt = require("jsonwebtoken");
+const config = require("../config");
+
+const sendResetPasswordMail = async (name, email, token) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      post: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: config.emailUser,
+        pass: config.emailPassword,
+      },
+    });
+
+    const mailOptions = {
+      from: config.emailUser,
+      to: email,
+      subject: "For Reset Password",
+      html: `<p>Hi ${name} Please copy the link and <a href="http://localhost:3000/reset-password/${token}">Reset your password</a>, This link has been expired in 30 seconds<p/>`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Mail has been Sent :", info.response);
+      }
+    });
+  } catch (error) {
+    // res.send(400).send({ success: false, msg: error.message });
+    console.log(error);
+  }
+};
 
 const securePassword = async (password) => {
   try {
@@ -83,7 +119,81 @@ const login_user = async (req, res) => {
   }
 };
 
+const forgot_password = async (req, res) => {
+  try {
+    const { Email } = req.body;
+    if (!Email) {
+      return res.status(401).send({ msg: "Please enter your email" });
+    }
+    const existUser = await User.findOne({ Email });
+    if (existUser) {
+      const token = jwt.sign({ _id: existUser._id }, process.env.SECRET_KEY, {
+        expiresIn: "40s",
+      });
+      sendResetPasswordMail(existUser.Name, existUser.Email, token);
+      const updateToken = await User.findByIdAndUpdate(
+        { _id: existUser._id },
+        { token: token }
+      );
+      res
+        .status(200)
+        .send({ msg: "Please Check Your inbox & Reset your Password" });
+    } else {
+      return res.status(402).send({ msg: "This Email Does not exists" });
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const reset_password_get = async (req, res) => {
+  try {
+    const token = req.params.token;
+    const tokenFound = await User.findOne({ token });
+    if (tokenFound) {
+      const validToken = jwt.verify(token, process.env.SECRET_KEY);
+      if (validToken) {
+        res.status(200).send("Valid User");
+      }
+    } else {
+      res.status(401).json({ msg: "Invalid user" });
+    }
+  } catch (error) {
+    res.status(400).json({ err: error.message });
+  }
+};
+
+const reset_password_post = async (req, res) => {
+  try {
+    const token = req.params.token;
+    const tokenFound = await User.findOne({ token });
+    console.log(tokenFound);
+    if (tokenFound) {
+      const validToken = jwt.verify(token, process.env.SECRET_KEY);
+      if (validToken) {
+        const { Password } = req.body;
+        const hashPassword = await securePassword(Password);
+
+        const resetPassword = await User.findByIdAndUpdate(
+          { _id: tokenFound._id },
+          {
+            $set: { Password: hashPassword, token: "" },
+          }
+        );
+        res.status(200).send({ msg: "Password Reset Successfully" });
+      }
+    } else {
+      return res.status(401).send({ msg: "This link has been expired " });
+    }
+  } catch (error) {
+    res.status(400).json({ err: error.message });
+  }
+};
+
 module.exports = {
   register_user,
   login_user,
+  forgot_password,
+  reset_password_get,
+  reset_password_post,
 };

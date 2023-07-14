@@ -97,6 +97,37 @@ const Login = () => {
     seterror({ ...error, [name]: "" });
   };
 
+  const forgotPassword = async () => {
+    const { Email } = loginData;
+    const res = await fetch("/forgot-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        Email,
+      }),
+    });
+    const data = await res.json();
+    if (res.status === 401) {
+      toast.warn("Plzz Enter Your Mail", {
+        position: "top-center",
+        theme: "colored",
+      });
+    } else if (res.status === 402) {
+      toast.error("This Email does not exists", {
+        position: "top-center",
+        theme: "colored",
+      });
+    } else {
+      toast.success("Please Check Your inbox & Reset your Password", {
+        position: "top-center",
+        theme: "colored",
+      });
+      setLoginData({});
+    }
+  };
+
   return (
     <>
       <div
@@ -166,7 +197,9 @@ const Login = () => {
           </FormControl>
           <div style={{ color: "red", fontSize: "15px" }}>{error.Password}</div>
           <NavLink>
-            <Typography sx={{ ml: 17, mt: 2 }}>Forgot Password ?</Typography>
+            <Typography sx={{ ml: 17, mt: 2 }} onClick={forgotPassword}>
+              Forgot Password ?
+            </Typography>
           </NavLink>
           <Button
             variant="contained"
