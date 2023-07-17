@@ -46,6 +46,17 @@ const securePassword = async (password) => {
   }
 };
 
+const generateToken = (_id) => {
+  try {
+    const token = jwt.sign({ _id }, process.env.SECRET_KEY, {
+      expiresIn: "20s",
+    });
+    return token;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const register_user = async (req, res) => {
   try {
     const {
@@ -106,6 +117,10 @@ const login_user = async (req, res) => {
         if (!password_match) {
           return res.status(402).send({ msg: "Invalid Credentials" });
         } else {
+          const token = generateToken(user_existence._id);
+          res.cookie("jwtoken", token, {
+            maxAge: "20000",
+          });
           res.status(200).send({ msg: "Success", data: user_existence });
         }
       } else {
@@ -167,7 +182,6 @@ const reset_password_post = async (req, res) => {
   try {
     const token = req.params.token;
     const tokenFound = await User.findOne({ token });
-    console.log(tokenFound);
     if (tokenFound) {
       const validToken = jwt.verify(token, process.env.SECRET_KEY);
       if (validToken) {
@@ -190,10 +204,15 @@ const reset_password_post = async (req, res) => {
   }
 };
 
+const dashboard = async (req, res) => {
+  res.send(req.rootUser);
+};
+
 module.exports = {
   register_user,
   login_user,
   forgot_password,
   reset_password_get,
   reset_password_post,
+  dashboard,
 };

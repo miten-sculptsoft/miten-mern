@@ -6,6 +6,11 @@ import Login from "./component/Login";
 import { ToastContainer } from "react-toastify";
 import ResetPassword from "./component/ResetPassword";
 import PageNotFound from "./component/PageNotFound";
+import ForgotPassword from "./component/ForgotPassword";
+import Dashboard from "./component/Dashboard";
+import Analytics from "./component/Analytics";
+import NavBar from "./component/NavBar";
+import ProtectedRoutes from "./component/ProtectedRoutes";
 
 function App() {
   const theme = createTheme({
@@ -19,6 +24,11 @@ function App() {
         <Route path="/registration" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/" element={<ProtectedRoutes Component={NavBar} />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/analytics" element={<Analytics />} />
+        </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
       <ToastContainer />

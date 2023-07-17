@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import photo from "../assets/App-Login_photo.png";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
@@ -16,6 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
+import Cookies from "js-cookie";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -137,6 +138,14 @@ const Signup = () => {
       }
     }
   }
+
+  useEffect(() => {
+    const login = Cookies.get("jwtoken");
+    if (login) {
+      navigate("/dashboard");
+    }
+  }, []);
+
   return (
     <div
       id="new"

@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import photo from "../assets/App-Login_photo.png";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
@@ -10,13 +10,16 @@ import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [error, seterror] = useState({});
+
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -83,6 +86,7 @@ const Login = () => {
           theme: "colored",
         });
         setLoginData({});
+        navigate("/dashboard");
       }
     }
   }
@@ -97,36 +101,12 @@ const Login = () => {
     seterror({ ...error, [name]: "" });
   };
 
-  const forgotPassword = async () => {
-    const { Email } = loginData;
-    const res = await fetch("/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        Email,
-      }),
-    });
-    const data = await res.json();
-    if (res.status === 401) {
-      toast.warn("Plzz Enter Your Mail", {
-        position: "top-center",
-        theme: "colored",
-      });
-    } else if (res.status === 402) {
-      toast.error("This Email does not exists", {
-        position: "top-center",
-        theme: "colored",
-      });
-    } else {
-      toast.success("Please Check Your inbox & Reset your Password", {
-        position: "top-center",
-        theme: "colored",
-      });
-      setLoginData({});
+  useEffect(() => {
+    const login = Cookies.get("jwtoken");
+    if (login) {
+      navigate("/dashboard");
     }
-  };
+  }, []);
 
   return (
     <>
@@ -196,10 +176,8 @@ const Login = () => {
             />
           </FormControl>
           <div style={{ color: "red", fontSize: "15px" }}>{error.Password}</div>
-          <NavLink>
-            <Typography sx={{ ml: 17, mt: 2 }} onClick={forgotPassword}>
-              Forgot Password ?
-            </Typography>
+          <NavLink to="/forgot-password">
+            <Typography sx={{ ml: 17, mt: 2 }}>Forgot Password ?</Typography>
           </NavLink>
           <Button
             variant="contained"
