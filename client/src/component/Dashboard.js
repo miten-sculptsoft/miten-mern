@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import {
   Box,
@@ -28,14 +28,16 @@ const Dashboard = () => {
   const card = (
     <React.Fragment>
       <CardContent>
-        <AddIcon
-          onClick={() => seteCardOpen(true)}
-          sx={{
-            height: "150px",
-            fontSize: "90px",
-            marginLeft: "70px",
-          }}
-        />
+        <NavLink to="/add">
+          <AddIcon
+            onClick={() => seteCardOpen(true)}
+            sx={{
+              height: "150px",
+              fontSize: "90px",
+              marginLeft: "70px",
+            }}
+          />
+        </NavLink>
         <Typography sx={{ textAlign: "center" }}>Add Card</Typography>
       </CardContent>
     </React.Fragment>
@@ -86,9 +88,22 @@ const Dashboard = () => {
           variant="contained"
           onClick={openeCard}
           color="success"
-          sx={{ marginTop: "100%", marginLeft: "340%", width: "40%" }}
+          sx={{
+            marginTop: "100%",
+            marginLeft: "340%",
+            width: "40%",
+            backgroundColor: "red",
+          }}
         >
-          Add Card
+          <NavLink
+            to="/add"
+            style={{
+              color: "white",
+              textDecoration: "none",
+            }}
+          >
+            Add Card
+          </NavLink>
         </Button>
       )}
     </>

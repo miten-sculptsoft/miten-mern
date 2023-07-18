@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
+const eCard = require("../models/cardModel");
 
 const sendResetPasswordMail = async (name, email, token) => {
   try {
@@ -209,7 +210,44 @@ const logout = async (req, res) => {
   res.status(200).json({ msg: "Logout Successfully" });
 };
 
-const add_card = async (req, res) => {};
+const add_card = async (req, res) => {
+  try {
+    const {
+      Full_name,
+      Job_title,
+      Company_name,
+      Bio,
+      Phone_number,
+      Email,
+      Website,
+      Address,
+      About,
+      Social_Media,
+    } = req.body;
+    const existingEmail = await eCard.findOne({ Email });
+    if (existingEmail) {
+      return res
+        .status(401)
+        .send({ err: "Email is already Exists try another one" });
+    }
+    const newCard = await new eCard({
+      Full_name,
+      Job_title,
+      Company_name,
+      Bio,
+      Phone_number,
+      Email,
+      Website,
+      Address,
+      About,
+      Social_Media,
+    });
+    const ecard = await newCard.save();
+    res.status(200).send({ data: ecard });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 
 const dashboard = async (req, res) => {
   res.send(req.rootUser);
