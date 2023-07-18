@@ -1,8 +1,45 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import NavBar from "./NavBar";
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CreateeCard from "./CreateeCard";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [eCardOpen, seteCardOpen] = useState(false);
+
+  const bull = (
+    <Box
+      component="span"
+      sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
+    >
+      •
+    </Box>
+  );
+
+  const card = (
+    <React.Fragment>
+      <CardContent>
+        <AddIcon
+          onClick={() => seteCardOpen(true)}
+          sx={{
+            height: "150px",
+            fontSize: "90px",
+            marginLeft: "70px",
+          }}
+        />
+        <Typography sx={{ textAlign: "center" }}>Add Card</Typography>
+      </CardContent>
+    </React.Fragment>
+  );
 
   const auth = async () => {
     try {
@@ -14,11 +51,14 @@ const Dashboard = () => {
         credentials: "include",
       });
       const data = await res.json();
-      console.log(data);
     } catch (error) {
       navigate("/login");
     }
   };
+
+  function openeCard() {
+    seteCardOpen(true);
+  }
 
   useEffect(() => {
     auth();
@@ -26,7 +66,31 @@ const Dashboard = () => {
 
   return (
     <>
-      <p>eCard</p>
+      {eCardOpen && <CreateeCard />}
+      {eCardOpen ? (
+        ""
+      ) : (
+        <Box sx={{ minWidth: 275 }}>
+          <Card
+            variant="outlined"
+            sx={{ borderRadius: "5% 5%", borderColor: "#2a24e3" }}
+          >
+            {card}
+          </Card>
+        </Box>
+      )}
+      {eCardOpen ? (
+        ""
+      ) : (
+        <Button
+          variant="contained"
+          onClick={openeCard}
+          color="success"
+          sx={{ marginTop: "100%", marginLeft: "340%", width: "40%" }}
+        >
+          Add Card
+        </Button>
+      )}
     </>
   );
 };

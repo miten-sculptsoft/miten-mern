@@ -11,6 +11,7 @@ import Dashboard from "./component/Dashboard";
 import Analytics from "./component/Analytics";
 import NavBar from "./component/NavBar";
 import ProtectedRoutes from "./component/ProtectedRoutes";
+import CreateeCard from "./component/CreateeCard";
 
 function App() {
   const theme = createTheme({
@@ -28,6 +29,7 @@ function App() {
         <Route path="/" element={<ProtectedRoutes Component={NavBar} />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
+          <Route path="/add" element={<CreateeCard />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

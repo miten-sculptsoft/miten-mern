@@ -49,7 +49,7 @@ const securePassword = async (password) => {
 const generateToken = (_id) => {
   try {
     const token = jwt.sign({ _id }, process.env.SECRET_KEY, {
-      expiresIn: "20s",
+      expiresIn: "10hr",
     });
     return token;
   } catch (error) {
@@ -119,7 +119,7 @@ const login_user = async (req, res) => {
         } else {
           const token = generateToken(user_existence._id);
           res.cookie("jwtoken", token, {
-            maxAge: "20000",
+            maxAge: "20000000000",
           });
           res.status(200).send({ msg: "Success", data: user_existence });
         }
@@ -204,6 +204,13 @@ const reset_password_post = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  res.clearCookie("jwtoken");
+  res.status(200).json({ msg: "Logout Successfully" });
+};
+
+const add_card = async (req, res) => {};
+
 const dashboard = async (req, res) => {
   res.send(req.rootUser);
 };
@@ -215,4 +222,6 @@ module.exports = {
   reset_password_get,
   reset_password_post,
   dashboard,
+  logout,
+  add_card,
 };

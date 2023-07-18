@@ -19,5 +19,7 @@ user_Route.post(
   UserController.reset_password_post
 );
 user_Route.get("/user-dashboard", auth, UserController.dashboard);
+user_Route.get("/logout", auth, UserController.logout);
+user_Route.post("/add-card", auth, UserController.add_card);
 
 module.exports = user_Route;
