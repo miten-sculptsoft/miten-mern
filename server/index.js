@@ -9,5 +9,5 @@ PORT = process.env.PORT || 7000;
 app.use("/", user_Route);
 
 app.listen(PORT, () => {
-  console.log(`Server Started on Port no ${PORT}`);
+  console.log(`Server Started on Port no new ${PORT}`);
 });
