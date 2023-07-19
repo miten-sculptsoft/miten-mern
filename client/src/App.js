@@ -12,6 +12,8 @@ import Analytics from "./component/Analytics";
 import NavBar from "./component/NavBar";
 import ProtectedRoutes from "./component/ProtectedRoutes";
 import CreateeCard from "./component/CreateeCard";
+import Billing from "./component/Billing";
+import ConfirmOrder from "./component/ConfirmOrder";
 
 function App() {
   const theme = createTheme({
@@ -30,6 +32,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/add" element={<CreateeCard />} />
+          <Route path="/billing" element={<Billing />} />
+          <Route path="/confirm-order" element={<ConfirmOrder />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

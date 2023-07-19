@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import CreateeCard from "./CreateeCard";
+import Billing from "./Billing";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -67,8 +68,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <>
-      {eCardOpen && <CreateeCard />}
+    <div>
+      {/* {eCardOpen && ((<CreateeCard />), (<Billing />))} */}
       {eCardOpen ? (
         ""
       ) : (
@@ -106,7 +107,7 @@ const Dashboard = () => {
           </NavLink>
         </Button>
       )}
-    </>
+    </div>
   );
 };
 
