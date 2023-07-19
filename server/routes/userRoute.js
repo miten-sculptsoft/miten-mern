@@ -4,6 +4,10 @@ const UserController = require("../controllers/userController");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const auth = require("../middleware/authentication");
+const stripe = require("stripe")(
+  "sk_test_51NVZ0BSBIRkMM4U4wkp7f3C4C9beIePyPacZ21lopl9egk2JmrYhNZ5yQTVLifJg3cJICATjTHM4q716cMRr5oxS00dKYoIR3K"
+);
+const { v4: uuidv4 } = require("uuid");
 
 user_Route.use(cookieParser());
 
@@ -21,5 +25,6 @@ user_Route.post(
 user_Route.get("/user-dashboard", auth, UserController.dashboard);
 user_Route.get("/logout", auth, UserController.logout);
 user_Route.post("/add-card", auth, UserController.add_card);
+user_Route.post("/payment", auth, UserController.payment);
 
 module.exports = user_Route;
