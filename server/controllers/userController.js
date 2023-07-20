@@ -4,6 +4,10 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const eCard = require("../models/cardModel");
+const stripe = require("stripe")(
+  "sk_test_51NVZ0BSBIRkMM4U4DFP2Hwnpqe3nqsri1DH4hdUCEp05wfADzr1VQzZ0RRJOm6EjMG64npCTrIWeKrNRaUlL25nw00f5JeuDyh"
+);
+const { v4: uuidv4 } = require("uuid");
 
 const sendResetPasswordMail = async (name, email, token) => {
   try {
@@ -249,7 +253,33 @@ const add_card = async (req, res) => {
   }
 };
 
-const payment = async (req, res) => {};
+//Payment Intent
+
+const payment = async (req, res) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "shirt",
+            },
+            unit_amount: 2000,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${process.env.CLIENT_URl}/payment-success`,
+      cancel_url: `${process.env.CLIENT_URl}/billing`,
+    });
+    console.log(session.url);
+    res.send({ url: session.url });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 const dashboard = async (req, res) => {
   res.send(req.rootUser);

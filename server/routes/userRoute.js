@@ -4,10 +4,9 @@ const UserController = require("../controllers/userController");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const auth = require("../middleware/authentication");
-const stripe = require("stripe")(
-  "sk_test_51NVZ0BSBIRkMM4U4wkp7f3C4C9beIePyPacZ21lopl9egk2JmrYhNZ5yQTVLifJg3cJICATjTHM4q716cMRr5oxS00dKYoIR3K"
-);
+const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { v4: uuidv4 } = require("uuid");
+const dotenv = require("dotenv");
 
 user_Route.use(cookieParser());
 

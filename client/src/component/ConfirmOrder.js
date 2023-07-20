@@ -79,7 +79,11 @@ const ConfirmOrder = () => {
               Go Back
             </Button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button variant="contained" sx={{ mt: 5 }}>
+            <Button
+              variant="contained"
+              sx={{ mt: 5 }}
+              onClick={() => navigate("/billing")}
+            >
               Next
             </Button>
           </div>
