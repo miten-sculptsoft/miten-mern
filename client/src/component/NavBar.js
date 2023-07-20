@@ -44,7 +44,6 @@ const NavBar = () => {
         credentials: "include",
       });
       let data = await res.json();
-      console.log(data);
       setUserData(data);
     } catch (error) {
       console.log(error);

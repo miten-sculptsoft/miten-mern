@@ -9,8 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import React, { useState } from "react";
-import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, Navigate, useLocation, useNavigate } from "react-router-dom";
 import "./CreateeCard.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -20,10 +20,13 @@ import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import banner from "../assets/Soluxy-banner.png";
+import background from "../assets/background.png";
 
 const CreateeCard = () => {
   const [color, setColor] = React.useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [eCardData, seteCardData] = useState({
     Full_name: "",
@@ -36,6 +39,7 @@ const CreateeCard = () => {
     Address: "",
     About: "",
     Social_Media: [],
+    newColor: "",
   });
 
   const handleChange = (e) => {
@@ -44,9 +48,17 @@ const CreateeCard = () => {
     seteCardData({ ...eCardData, [name]: value });
   };
 
-  // function handleClick() {
-  //   console.log(eCardData);
-  // }
+  function handleNext() {
+    navigate("/confirm-order", { state: eCardData });
+    sessionStorage.setItem("allValue", JSON.stringify(eCardData));
+  }
+
+  useEffect(() => {
+    const values = sessionStorage.getItem("allValue");
+    if (values) {
+      seteCardData(JSON.parse(values));
+    }
+  }, []);
 
   return (
     <div className="css-1ioylu4-abc">
@@ -57,12 +69,19 @@ const CreateeCard = () => {
             <p style={{ fontSize: "15px" }}>Fill in Your Details</p>
           </div>
           <div>
-            <NavLink to="/billing">Billing</NavLink>
-            <p style={{ fontSize: "15px" }}>Enter Billing Information</p>
+            <NavLink
+              to="/confirm-order"
+              // onClick={() =>
+              //   sessionStorage.setItem("allValue", JSON.stringify(eCardData))
+              // }
+            >
+              Review eCard
+            </NavLink>
+            <p style={{ fontSize: "15px" }}>View Order Details</p>
           </div>
           <div>
-            <NavLink to="/confirm-order">Confirm order</NavLink>
-            <p style={{ fontSize: "15px" }}>View Order Details</p>
+            <NavLink to="/billing">Billing</NavLink>
+            <p style={{ fontSize: "15px" }}>Enter Billing Information</p>
           </div>
         </Typography>
       </div>
@@ -81,9 +100,10 @@ const CreateeCard = () => {
             <InputLabel>Theme</InputLabel>
             <TextField
               sx={{ width: "100px" }}
-              value={color}
+              value={eCardData.newColor}
               type={"color"}
-              onChange={(e) => setColor(e.target.value)}
+              name="newColor"
+              onChange={handleChange}
             />
           </Box>
           <br />
@@ -252,17 +272,17 @@ const CreateeCard = () => {
               variant="contained"
               size="medium"
               sx={{ width: "20%", mt: 2 }}
-              onClick={() => navigate("/billing")}
+              onClick={handleNext}
             >
               Next
             </Button>
           </FormControl>
         </div>
-        <div style={{ marginLeft: "10%", width: "35%" }}>
-          <Card>
+        <div style={{ marginLeft: "15%", width: "35%" }}>
+          <Card sx={{ backgroundColor: eCardData.newColor }}>
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                <img src={logo} alt="no" width="200" />
+                <img src={background} alt="no" width="280" />
               </Typography>
             </CardContent>
             <CardContent sx={{ margin: "auto", textAlign: "end" }}>
@@ -314,11 +334,38 @@ const CreateeCard = () => {
               &nbsp;&nbsp;&nbsp;
               {eCardData.Address}
             </Typography>
+            <CardContent>
+              <Typography variant="body2" color="text.secondary">
+                <img src={banner} alt="no" width="280" />
+              </Typography>
+            </CardContent>
+            <Typography variant="h6" sx={{ margin: "5%" }}>
+              About
+            </Typography>
+            <Typography variant="h7" sx={{ padding: "3%" }}>
+              Soluxy is a digital name card service that can be used anywhere
+              and anytime by anyone. This is the perfect service for businesses,
+              freelancers, entrepreneurs, and professionals who needs to give
+              out cards during a networking event or to friends, associates and
+              customers. Your digital card design can be tailored to fit your
+              needs and shared with the world in seconds. It’s time to take a
+              fresh approach to digital business card design. Join the
+              revolution today by using Soluxy and start working smarter!
+            </Typography>
+            <Typography variant="h5" sx={{ margin: "5%" }}>
+              Let's Connect
+            </Typography>
+            <Typography variant="h7" sx={{ mb: 2 }}>
+              &nbsp;&nbsp;&nbsp;
+              {eCardData.Social_Media}
+            </Typography>
+            <Button variant="contained" sx={{ margin: "2%", width: "90%" }}>
+              Share
+            </Button>
           </Card>
         </div>
       </div>
     </div>
   );
 };
-
 export default CreateeCard;
