@@ -4,9 +4,7 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const eCard = require("../models/cardModel");
-const stripe = require("stripe")(
-  "sk_test_51NVZ0BSBIRkMM4U4R9xBDt62TGCQtouj4xlT0QNyazRCT5tQ0jvYGuPZsLmQLfKLAgs47XKKKgqCvY2cP3GRqPzB00yFnKq8sj"
-);
+const stripe = require("stripe")("");
 const { v4: uuidv4 } = require("uuid");
 
 const sendResetPasswordMail = async (name, email, token) => {
