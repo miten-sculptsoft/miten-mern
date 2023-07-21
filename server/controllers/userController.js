@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 const eCard = require("../models/cardModel");
 const stripe = require("stripe")(
-  "sk_test_51NVZ0BSBIRkMM4U4DFP2Hwnpqe3nqsri1DH4hdUCEp05wfADzr1VQzZ0RRJOm6EjMG64npCTrIWeKrNRaUlL25nw00f5JeuDyh"
+  "sk_test_51NVZ0BSBIRkMM4U4R9xBDt62TGCQtouj4xlT0QNyazRCT5tQ0jvYGuPZsLmQLfKLAgs47XKKKgqCvY2cP3GRqPzB00yFnKq8sj"
 );
 const { v4: uuidv4 } = require("uuid");
 
@@ -33,7 +33,7 @@ const sendResetPasswordMail = async (name, email, token) => {
       if (error) {
         console.log(error);
       } else {
-        console.log("Mail has been Sent :", info.response);
+        console.log("Mail has been Sent :", info.res);
       }
     });
   } catch (error) {
@@ -256,6 +256,14 @@ const add_card = async (req, res) => {
 //Payment Intent
 
 const payment = async (req, res) => {
+  const eCardDetail = req.body.parsevalue;
+
+  const customer = await stripe.customers.create({
+    metadata: {
+      userId: req.body.userId,
+      eCard: JSON.stringify(eCardDetail),
+    },
+  });
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -263,22 +271,95 @@ const payment = async (req, res) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "shirt",
+              name: eCardDetail.Full_name,
+              description: eCardDetail.Job_title,
             },
-            unit_amount: 2000,
+            unit_amount: 1000 * 3.5,
           },
           quantity: 1,
         },
       ],
+      customer: customer.id,
       mode: "payment",
       success_url: `${process.env.CLIENT_URl}/payment-success`,
       cancel_url: `${process.env.CLIENT_URl}/billing`,
     });
-    console.log(session.url);
-    res.send({ url: session.url });
+    // console.log(success_url);
+    res.send({ url: session.url, payment: session.payment_status });
   } catch (error) {
     console.log(error.message);
   }
+};
+
+// Create order
+
+const createOrder = async (customer) => {
+  const Items = JSON.parse(customer.metadata.eCard);
+
+  const newOrder = new eCard({
+    Full_name: Items.Full_name,
+    Job_title: Items.Job_title,
+    Company_name: Items.Company_name,
+    Bio: Items.Bio,
+    Phone_number: Items.Phone_number,
+    Email: Items.Email,
+    Website: Items.Website,
+    Address: Items.Address,
+    About: Items.Address,
+    Social_Media: Items.Social_Media,
+  });
+
+  try {
+    const saveOrder = await newOrder.save();
+    console.log("Processes Order", saveOrder);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+// Stripe Webhook
+
+let endpointSecret;
+
+// endpointSecret =
+//   "whsec_dcb07901a8df17c9327a81ce0bc117df0cbb1ac0d2bcd13e751d629ed4aed31e";
+
+const webhook = (req, res) => {
+  console.log("hiii");
+  const sig = req.headers["stripe-signature"];
+
+  let data;
+  let eventType;
+
+  if (endpointSecret) {
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+      console.log("Webhook verified");
+    } catch (err) {
+      console.log(`Webhook error':${err.message}`);
+      res.status(402).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+    (data = event.data.object), (eventType = event.type);
+  } else {
+    (data = req.body.data.object), (eventType = req.body.type);
+  }
+
+  // Handle the event
+  if (eventType === "checkout.session.completed") {
+    stripe.customers
+      .retrieve(data.customer)
+      .then((customer) => {
+        // console.log(customer), console.log("DATA", data);
+        createOrder(customer, data);
+      })
+      .catch((err) => console.log(err.message));
+  }
+
+  // Return a 200 res to acknowledge receipt of the event
+  res.send().end();
 };
 
 const dashboard = async (req, res) => {
@@ -295,4 +376,5 @@ module.exports = {
   logout,
   add_card,
   payment,
+  webhook,
 };

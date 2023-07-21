@@ -17,6 +17,7 @@ function Billing({ data }) {
         })
         .then((res) => {
           if (res.data.url) {
+            console.log(res.data.payment);
             window.location.href = res.data.url;
           }
         });
