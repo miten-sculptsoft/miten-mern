@@ -1,11 +1,9 @@
 import { Button, Typography } from "@mui/material";
 import React from "react";
-import { NavLink, json } from "react-router-dom";
-import StripeCheckout from "react-stripe-checkout";
-import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 
-function Billing({ data }) {
+function Billing() {
   async function handlePay() {
     try {
       const data = sessionStorage.getItem("allValue");
@@ -19,6 +17,7 @@ function Billing({ data }) {
           if (res.data.url) {
             console.log(res.data.payment);
             window.location.href = res.data.url;
+            sessionStorage.clear("allValue");
           }
         });
     } catch (error) {

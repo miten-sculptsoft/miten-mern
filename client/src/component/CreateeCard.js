@@ -3,6 +3,8 @@ import {
   Button,
   FormControl,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -10,11 +12,10 @@ import {
 } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
-import { NavLink, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./CreateeCard.css";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import logo from "../assets/white.jpg";
 import "./CreateeCard.css";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
@@ -22,11 +23,14 @@ import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import banner from "../assets/Soluxy-banner.png";
 import background from "../assets/background.png";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
 
 const CreateeCard = () => {
-  const [color, setColor] = React.useState("");
+  // const [color, setColor] = React.useState("");
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
+  const [error, seterror] = useState({});
 
   const [eCardData, seteCardData] = useState({
     Full_name: "",
@@ -49,9 +53,50 @@ const CreateeCard = () => {
   };
 
   function handleNext() {
-    navigate("/confirm-order", { state: eCardData });
-    sessionStorage.setItem("allValue", JSON.stringify(eCardData));
+    let isValid = validateForm();
+    if (isValid) {
+      navigate("/confirm-order", { state: eCardData });
+      sessionStorage.setItem("allValue", JSON.stringify(eCardData));
+    }
   }
+
+  const validateForm = () => {
+    let err = {};
+
+    if (eCardData.Email === "") {
+      err.Email = "Email Required";
+    } else if (!eCardData.Email.includes("@")) {
+      err.Email = "Enter a valid Email";
+    }
+    if (eCardData.Job_title === "") {
+      err.Job_title = "Job_title Required";
+    }
+    if (eCardData.Full_name === "") {
+      err.Full_name = "Full_name Required";
+    }
+
+    if (eCardData.Company_name === "") {
+      err.Company_name = "Company_name Required";
+    }
+    if (eCardData.Phone_number === "") {
+      err.Phone_number = "Phone_Number Required";
+    } else if (eCardData.Phone_number.length != 10) {
+      err.Phone_number = "Enter 10 digit Mobile Number";
+    }
+    if (eCardData.Bio === "") {
+      err.Bio = "Bio Required";
+    }
+    if (eCardData.Address === "") {
+      err.Address = "Address Required";
+    }
+    if (eCardData.Website === "") {
+      err.Website = "Website Required";
+    }
+
+    seterror({ ...err });
+
+    return Object.keys(err).length < 1;
+  };
 
   useEffect(() => {
     const values = sessionStorage.getItem("allValue");
@@ -102,6 +147,7 @@ const CreateeCard = () => {
               sx={{ width: "100px" }}
               value={eCardData.newColor}
               type={"color"}
+              id="newColor"
               name="newColor"
               onChange={handleChange}
             />
@@ -121,10 +167,13 @@ const CreateeCard = () => {
             sx={{ width: 400 }}
             rows
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>
+            {error.Full_name}
+          </div>
+
           <br />
           <InputLabel shrink>
-            <b>Jon title:</b>
+            <b>Job title:</b>
           </InputLabel>
           <TextField
             type="text"
@@ -137,7 +186,9 @@ const CreateeCard = () => {
             sx={{ width: 400 }}
             rows
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>
+            {error.Job_title}
+          </div>
           <br />
           <InputLabel shrink>
             <b>Company Name:</b>
@@ -153,7 +204,9 @@ const CreateeCard = () => {
             sx={{ width: 400 }}
             rows
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>
+            {error.Company_name}
+          </div>
           <br />
           <InputLabel shrink>
             <b>Bio:</b>
@@ -168,7 +221,7 @@ const CreateeCard = () => {
             onChange={handleChange}
             sx={{ width: 400 }}
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>{error.Bio}</div>
           <br />
           <InputLabel shrink>
             <b>Contact Number:</b>
@@ -184,7 +237,9 @@ const CreateeCard = () => {
             onChange={handleChange}
             sx={{ width: 400 }}
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>
+            {error.Phone_number}
+          </div>
           <br />
           <InputLabel shrink>
             <b>Email:</b>
@@ -199,7 +254,7 @@ const CreateeCard = () => {
             onChange={handleChange}
             sx={{ width: 400 }}
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>{error.Email}</div>
           <br />
           <InputLabel shrink>
             <b>Website:</b>
@@ -214,7 +269,7 @@ const CreateeCard = () => {
             onChange={handleChange}
             sx={{ width: 400 }}
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>{error.Website}</div>
           <br />
           <InputLabel shrink>
             <b>Address:</b>
@@ -229,7 +284,7 @@ const CreateeCard = () => {
             onChange={handleChange}
             sx={{ width: 400 }}
           />
-          <br />
+          <div style={{ color: "red", fontSize: "15px" }}>{error.Address}</div>
           <br />
           <InputLabel shrink>
             <b>About:</b>
@@ -263,9 +318,11 @@ const CreateeCard = () => {
               sx={{ width: { sm: 400 }, p: 1 }}
             >
               <MenuItem value={"Facebook"}>Facebook</MenuItem>
+              &nbsp;&nbsp;&nbsp;
               <MenuItem value={"Instagram"}>Instagram</MenuItem>
-              <MenuItem value={"Twitter"}>Twitter</MenuItem>
-              <MenuItem value={"Youtube"}>Youtube</MenuItem>
+              &nbsp;&nbsp;&nbsp;
+              <MenuItem value={"Twitter"}>Twitter</MenuItem> &nbsp;&nbsp;&nbsp;
+              <MenuItem value={"Youtube"}>Youtube</MenuItem> &nbsp;&nbsp;&nbsp;
               <MenuItem value={"Tiktok"}>Tiktok</MenuItem>
             </Select>
             <Button
@@ -330,10 +387,13 @@ const CreateeCard = () => {
             <LocationOnIcon
               sx={{ color: "#1815e7d9", margin: "-6px", ml: 2 }}
             />
-            <Typography variant="h7" sx={{ mb: 2 }}>
+            <Typography variant="h7" sx={{ mb: 3 }}>
               &nbsp;&nbsp;&nbsp;
               {eCardData.Address}
             </Typography>
+            <Button variant="contained" sx={{ margin: "4%", width: "90%" }}>
+              Save Contact
+            </Button>
             <CardContent>
               <Typography variant="body2" color="text.secondary">
                 <img src={banner} alt="no" width="280" />

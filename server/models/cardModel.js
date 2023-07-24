@@ -36,6 +36,9 @@ const cardSchema = mongoose.Schema({
       type: String,
     },
   ],
+  newColor: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Ecard_data", cardSchema);

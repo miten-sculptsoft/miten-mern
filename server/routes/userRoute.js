@@ -12,7 +12,6 @@ user_Route.use(cookieParser());
 
 user_Route.use(express.json());
 user_Route.use(bodyParser.json());
-// user_Route.use("/webhook", express.raw({ type: "*/*" }));
 
 user_Route.post("/signup", UserController.register_user);
 user_Route.post("/signin", UserController.login_user);
@@ -24,12 +23,14 @@ user_Route.post(
 );
 user_Route.get("/user-dashboard", auth, UserController.dashboard);
 user_Route.get("/logout", auth, UserController.logout);
-user_Route.post("/add-card", auth, UserController.add_card);
+// user_Route.post("/add-card", auth, UserController.add_card);
 user_Route.post("/payment", auth, UserController.payment);
 user_Route.post(
   "/webhook",
   express.raw({ type: "*/*" }),
   UserController.webhook
 );
+user_Route.get("/edit-card/:id", auth, UserController.edit_card);
+user_Route.post("/update-card/:id", auth, UserController.update_card);
 
 module.exports = user_Route;

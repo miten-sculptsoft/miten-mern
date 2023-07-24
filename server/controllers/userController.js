@@ -4,6 +4,7 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const eCard = require("../models/cardModel");
+const dotenv = require("dotenv");
 const stripe = require("stripe")("");
 const { v4: uuidv4 } = require("uuid");
 
@@ -212,44 +213,46 @@ const logout = async (req, res) => {
   res.status(200).json({ msg: "Logout Successfully" });
 };
 
-const add_card = async (req, res) => {
-  try {
-    const {
-      Full_name,
-      Job_title,
-      Company_name,
-      Bio,
-      Phone_number,
-      Email,
-      Website,
-      Address,
-      About,
-      Social_Media,
-    } = req.body;
-    const existingEmail = await eCard.findOne({ Email });
-    if (existingEmail) {
-      return res
-        .status(401)
-        .send({ err: "Email is already Exists try another one" });
-    }
-    const newCard = await new eCard({
-      Full_name,
-      Job_title,
-      Company_name,
-      Bio,
-      Phone_number,
-      Email,
-      Website,
-      Address,
-      About,
-      Social_Media,
-    });
-    const ecard = await newCard.save();
-    res.status(200).send({ data: ecard });
-  } catch (error) {
-    res.status(400).send(error.message);
-  }
-};
+// const add_card = async (req, res) => {
+//   try {
+//     const {
+//       Full_name,
+//       Job_title,
+//       Company_name,
+//       Bio,
+//       Phone_number,
+//       Email,
+//       Website,
+//       Address,
+//       About,
+//       Social_Media,
+//       newColor,
+//     } = req.body;
+//     const existingEmail = await eCard.findOne({ Email });
+//     if (existingEmail) {
+//       return res
+//         .status(401)
+//         .send({ err: "Email is already Exists try another one" });
+//     }
+//     const newCard = await new eCard({
+//       Full_name,
+//       Job_title,
+//       Company_name,
+//       Bio,
+//       Phone_number,
+//       Email,
+//       Website,
+//       Address,
+//       About,
+//       Social_Media,
+//       newColor,
+//     });
+//     const ecard = await newCard.save();
+//     res.status(200).send({ data: ecard });
+//   } catch (error) {
+//     res.status(400).send(error.message);
+//   }
+// };
 
 //Payment Intent
 
@@ -303,8 +306,9 @@ const createOrder = async (customer) => {
     Email: Items.Email,
     Website: Items.Website,
     Address: Items.Address,
-    About: Items.Address,
+    About: Items.About,
     Social_Media: Items.Social_Media,
+    newColor: Items.newColor,
   });
 
   try {
@@ -361,7 +365,38 @@ const webhook = (req, res) => {
 };
 
 const dashboard = async (req, res) => {
-  res.send(req.rootUser);
+  const geteCard = await eCard.find();
+  if (!geteCard) {
+    return res.status(404).send({ msg: "No card Found" });
+  } else {
+    res.status(200).send({ data: geteCard });
+  }
+};
+
+const edit_card = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const card = await eCard.findById(id);
+    if (card) {
+      res.status(200).send({ data: card });
+    } else {
+      res.status(404).send({ msg: "No card Found" });
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+const update_card = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cardUpdate = await eCard.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    res.status(200).send({ cardUpdate });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 };
 
 module.exports = {
@@ -372,7 +407,8 @@ module.exports = {
   reset_password_post,
   dashboard,
   logout,
-  add_card,
   payment,
   webhook,
+  edit_card,
+  update_card,
 };

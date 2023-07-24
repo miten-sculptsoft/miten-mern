@@ -75,6 +75,29 @@ const ConfirmOrder = () => {
             <div style={{ marginTop: "50%" }}>
               <Typography variant="h7">Email - {reviewData?.Email}</Typography>
             </div>
+          </div>
+          <div>
+            <div>
+              <Typography variant="h7">
+                Website - {reviewData?.Website}
+              </Typography>
+            </div>
+            <div style={{ marginTop: "25%" }}>
+              <Typography variant="h7">
+                Address - {reviewData?.Address}
+              </Typography>
+            </div>
+            <div style={{ marginTop: "30%" }}>
+              <Typography variant="h7">About - {reviewData?.About}</Typography>
+            </div>
+            <div style={{ marginTop: "30%" }}>
+              <Typography variant="h7">Bio - {reviewData?.Bio}</Typography>
+            </div>
+            <div style={{ marginTop: "20%" }}>
+              <Typography variant="h7">
+                Social_Media - {reviewData?.Social_Media}
+              </Typography>
+            </div>
             <Button variant="contained" onClick={handleBack} sx={{ mt: 5 }}>
               Go Back
             </Button>
@@ -87,29 +110,7 @@ const ConfirmOrder = () => {
               Next
             </Button>
           </div>
-          <div>
-            <div>
-              <Typography variant="h7">
-                Website - {reviewData?.Website}
-              </Typography>
-            </div>
-            <div style={{ marginTop: "40%" }}>
-              <Typography variant="h7">
-                Address - {reviewData?.Address}
-              </Typography>
-            </div>
-            <div style={{ marginTop: "50%" }}>
-              <Typography variant="h7">About - {reviewData?.About}</Typography>
-            </div>
-            <div style={{ marginTop: "40%" }}>
-              <Typography variant="h7">Bio - {reviewData?.Bio}</Typography>
-            </div>
-            <div style={{ marginTop: "40%" }}>
-              <Typography variant="h7">
-                Social_Media - {reviewData?.Social_Media}
-              </Typography>
-            </div>
-          </div>
+
           <div>
             <div style={{ width: "100%" }}>
               <Card
