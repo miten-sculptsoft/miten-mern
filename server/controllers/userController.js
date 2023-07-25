@@ -5,9 +5,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 const eCard = require("../models/cardModel");
 const dotenv = require("dotenv");
-const stripe = require("stripe")(
-  "sk_test_51NVZ0BSBIRkMM4U402jqIwNpGWpqZrSKGPya5Q4NbsWxlC7ge7gTSRhFnIbKIDbj2NerfzRWd0oUmkA5YYqiddKf00YrqCV88Z"
-);
+const stripe = require("stripe")("");
 const { v4: uuidv4 } = require("uuid");
 
 const sendResetPasswordMail = async (name, email, token) => {
