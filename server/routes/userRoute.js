@@ -21,9 +21,9 @@ user_Route.post(
   "/reset-password-post/:token",
   UserController.reset_password_post
 );
-user_Route.get("/user-dashboard", auth, UserController.dashboard);
+user_Route.get("/user-dashboard", auth, UserController.Nav_dashboard);
+user_Route.get("/user-eCard", auth, UserController.user_eCard);
 user_Route.get("/logout", auth, UserController.logout);
-// user_Route.post("/add-card", auth, UserController.add_card);
 user_Route.post("/payment", auth, UserController.payment);
 user_Route.post(
   "/webhook",

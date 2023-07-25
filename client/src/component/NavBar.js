@@ -44,11 +44,12 @@ const NavBar = () => {
         credentials: "include",
       });
       let data = await res.json();
-      setUserData(data);
+      setUserData(data.data[0]);
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(userData);
 
   async function handleLogout() {
     try {
@@ -91,7 +92,7 @@ const NavBar = () => {
             >
               eCards
             </Typography>
-            <div style={{ marginLeft: "85%" }}>
+            <div style={{ marginLeft: "85%", marginTop: "20px" }}>
               <Button
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}

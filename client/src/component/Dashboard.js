@@ -42,7 +42,7 @@ const Dashboard = () => {
 
   const auth = async () => {
     try {
-      const res = await fetch("/user-dashboard", {
+      const res = await fetch("/user-eCard", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

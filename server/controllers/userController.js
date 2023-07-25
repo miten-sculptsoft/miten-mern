@@ -5,7 +5,9 @@ const jwt = require("jsonwebtoken");
 const config = require("../config");
 const eCard = require("../models/cardModel");
 const dotenv = require("dotenv");
-const stripe = require("stripe")("");
+const stripe = require("stripe")(
+  "sk_test_51NVZ0BSBIRkMM4U402jqIwNpGWpqZrSKGPya5Q4NbsWxlC7ge7gTSRhFnIbKIDbj2NerfzRWd0oUmkA5YYqiddKf00YrqCV88Z"
+);
 const { v4: uuidv4 } = require("uuid");
 
 const sendResetPasswordMail = async (name, email, token) => {
@@ -324,7 +326,7 @@ const createOrder = async (customer) => {
 let endpointSecret;
 
 // endpointSecret =
-//   "whsec_dcb07901a8df17c9327a81ce0bc117df0cbb1ac0d2bcd13e751d629ed4aed31e";
+//   "";
 
 const webhook = (req, res) => {
   console.log("hiii");
@@ -364,7 +366,16 @@ const webhook = (req, res) => {
   res.send().end();
 };
 
-const dashboard = async (req, res) => {
+const Nav_dashboard = async (req, res) => {
+  const geteCard = await User.find();
+  if (!geteCard) {
+    return res.status(404).send({ msg: "No card Found" });
+  } else {
+    res.status(200).send({ data: geteCard });
+  }
+};
+
+const user_eCard = async (req, res) => {
   const geteCard = await eCard.find();
   if (!geteCard) {
     return res.status(404).send({ msg: "No card Found" });
@@ -405,10 +416,11 @@ module.exports = {
   forgot_password,
   reset_password_get,
   reset_password_post,
-  dashboard,
+  Nav_dashboard,
   logout,
   payment,
   webhook,
   edit_card,
   update_card,
+  user_eCard,
 };
