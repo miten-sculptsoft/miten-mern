@@ -72,7 +72,9 @@ const Dashboard = () => {
       const data = await res.json();
       console.log(data.data);
       if (data) {
-        navigate("/edit", { state: data.data });
+        navigate(`/edit/${data.data.Full_name}/${data.data._id}`, {
+          state: data.data,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -91,7 +93,13 @@ const Dashboard = () => {
         ) : backendCardData.length > 0 ? (
           <div style={{ display: "flex", gap: "50px" }}>
             {backendCardData.map((cards) => (
-              <div>
+              <div
+                onClick={() =>
+                  navigate(`/view/${cards.Full_name}/${cards._id}`, {
+                    state: cards,
+                  })
+                }
+              >
                 <Card
                   sx={{
                     backgroundColor: cards.newColor,

@@ -49,7 +49,6 @@ const NavBar = () => {
       console.log(error);
     }
   };
-  console.log(userData);
 
   async function handleLogout() {
     try {

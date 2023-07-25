@@ -3,8 +3,6 @@ import {
   Button,
   FormControl,
   InputLabel,
-  ListItemIcon,
-  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -23,8 +21,6 @@ import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import banner from "../assets/Soluxy-banner.png";
 import background from "../assets/background.png";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
 
 const CreateeCard = () => {
   // const [color, setColor] = React.useState("");
