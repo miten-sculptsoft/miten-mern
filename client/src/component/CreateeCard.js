@@ -3,6 +3,8 @@ import {
   Button,
   FormControl,
   InputLabel,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Select,
   TextField,
@@ -21,6 +23,10 @@ import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import banner from "../assets/Soluxy-banner.png";
 import background from "../assets/background.png";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import TwitterIcon from "@mui/icons-material/Twitter";
 
 const CreateeCard = () => {
   // const [color, setColor] = React.useState("");
@@ -48,6 +54,43 @@ const CreateeCard = () => {
     seteCardData({ ...eCardData, [name]: value });
   };
 
+  // const icons = [
+  //   {
+  //     id: 1,
+  //     value: "Facebook",
+  //     isChecked: false,
+  //     // ic: <FacebookIcon />,
+  //   },
+  //   {
+  //     id: 2,
+  //     value: "Instagram",
+  //     isChecked: false,
+
+  //     // ic: <FacebookIcon />,
+  //   },
+  //   {
+  //     id: 3,
+  //     value: "a",
+  //     isChecked: false,
+
+  //     // ic: <FacebookIcon />,
+  //   },
+  //   {
+  //     id: 4,
+  //     value: "b",
+  //     isChecked: false,
+
+  //     // ic: <FacebookIcon />,
+  //   },
+  //   {
+  //     id: 5,
+  //     value: "c",
+  //     isChecked: false,
+
+  //     // ic: <FacebookIcon />,
+  //   },
+  // ];
+
   function handleNext() {
     let isValid = validateForm();
     if (isValid) {
@@ -55,6 +98,20 @@ const CreateeCard = () => {
       sessionStorage.setItem("allValue", JSON.stringify(eCardData));
     }
   }
+
+  // function handleClick(id) {
+  //   icons.filter((val, index) => {
+  //     if (val.id == id) {
+  //       val.isChecked = !val.isChecked;
+  //       if (val.isChecked) {
+  //         eCardData.Social_Media.push(val.value);
+  //       } else {
+  //         eCardData.Social_Media.pop(val.value);
+  //       }
+  //       console.log(eCardData.Social_Media);
+  //     }
+  //   });
+  // }
 
   const validateForm = () => {
     let err = {};
@@ -303,7 +360,6 @@ const CreateeCard = () => {
             <InputLabel id="demo-simple-select-label">
               Select Social Media
             </InputLabel>
-
             <Select
               multiple
               id="Social_Media"
@@ -314,13 +370,21 @@ const CreateeCard = () => {
               sx={{ width: { sm: 400 }, p: 1 }}
             >
               <MenuItem value={"Facebook"}>Facebook</MenuItem>
-              &nbsp;&nbsp;&nbsp;
               <MenuItem value={"Instagram"}>Instagram</MenuItem>
-              &nbsp;&nbsp;&nbsp;
-              <MenuItem value={"Twitter"}>Twitter</MenuItem> &nbsp;&nbsp;&nbsp;
-              <MenuItem value={"Youtube"}>Youtube</MenuItem> &nbsp;&nbsp;&nbsp;
-              <MenuItem value={"Tiktok"}>Tiktok</MenuItem>
+              <MenuItem value={"Twitter"}>Twitter</MenuItem>
+              <MenuItem value={"Youtube"}>Youtube</MenuItem>
+
+              {/* {icons.map((val) => {
+                return (
+                  <>
+                    <MenuItem onClick={() => handleClick(val.id)} value={"abc"}>
+                      {val.value}
+                    </MenuItem>
+                  </>
+                );
+              })} */}
             </Select>
+
             <Button
               variant="contained"
               size="medium"
@@ -411,10 +475,57 @@ const CreateeCard = () => {
             <Typography variant="h5" sx={{ margin: "5%" }}>
               Let's Connect
             </Typography>
-            <Typography variant="h7" sx={{ mb: 2 }}>
-              &nbsp;&nbsp;&nbsp;
-              {eCardData.Social_Media}
+            <Typography
+              variant="h7"
+              sx={{ mb: 2, display: "flex", gap: "10px" }}
+            >
+              {eCardData.Social_Media.map((val) => {
+                return (
+                  <>
+                    <p>{val === "Facebook" ? <FacebookIcon /> : null}</p>
+                    <p>{val === "Instagram" ? <InstagramIcon /> : null}</p>
+                    <p>{val === "Twitter" ? <TwitterIcon /> : null}</p>
+                    <p>{val === "Youtube" ? <YouTubeIcon /> : null}</p>
+                  </>
+                );
+              })}
+              {/* {eCardData.Social_Media == "Facebook" ? (
+                <p>
+                  <FacebookIcon />
+                </p>
+              ) : (
+                ""
+              )}
+              {eCardData.Social_Media == "Instagram" ? (
+                <p>
+                  <LocationOnIcon />
+                </p>
+              ) : (
+                ""
+              )}
+              {eCardData.Social_Media == "Tiktok" ? (
+                <p>
+                  <FacebookIcon />
+                </p>
+              ) : (
+                ""
+              )}
+              {eCardData.Social_Media == "Twitter" ? (
+                <p>
+                  <FacebookIcon />
+                </p>
+              ) : (
+                ""
+              )}
+              {eCardData.Social_Media == "Youtube" ? (
+                <p>
+                  <FacebookIcon />
+                </p>
+              ) : (
+                ""
+              )} */}
             </Typography>
+
             <Button variant="contained" sx={{ margin: "2%", width: "90%" }}>
               Share
             </Button>

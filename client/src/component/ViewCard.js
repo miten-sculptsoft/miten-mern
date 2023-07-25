@@ -6,12 +6,26 @@ import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import banner from "../assets/Soluxy-banner.png";
 import background from "../assets/background.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import {
+  FacebookShareButton,
+  InstapaperShareButton,
+  TwitterShareButton,
+} from "react-share";
 
 const ViewCard = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [viewCardData, setViewCardData] = useState(location.state);
+
+  function handleShare() {
+    navigate("/share");
+  }
 
   return (
     <div style={{ width: 320 }}>
@@ -90,11 +104,48 @@ const ViewCard = () => {
         <Typography variant="h5" sx={{ margin: "5%" }}>
           Let's Connect
         </Typography>
-        <Typography variant="h7" sx={{ mb: 2 }}>
+        <Typography variant="h7" sx={{ mb: 2, display: "flex", gap: "10px" }}>
           &nbsp;&nbsp;&nbsp;
-          {viewCardData.Social_Media}
+          {viewCardData.Social_Media.map((val) => {
+            return (
+              <>
+                <p>
+                  {val === "Facebook" ? (
+                    <FacebookShareButton url="https://www.facebook.com/VarunDhawan.co/">
+                      <FacebookIcon />
+                    </FacebookShareButton>
+                  ) : null}
+                </p>
+                <p>
+                  {val === "Instagram" ? (
+                    <InstapaperShareButton url="https://www.instagram.com/varundvn/?hl=en">
+                      <InstagramIcon />
+                    </InstapaperShareButton>
+                  ) : null}
+                </p>
+                <p>
+                  {val === "Twitter" ? (
+                    <TwitterShareButton url="https://twitter.com/i/flow/login?redirect_after_login=%2FVarunDhawan_FC">
+                      <TwitterIcon />
+                    </TwitterShareButton>
+                  ) : null}
+                </p>
+                <p>
+                  {val === "Youtube" ? (
+                    <FacebookShareButton url="https://www.youtube.com/channel/UCeVMnSShP_Iviwkknt83cww">
+                      <YouTubeIcon />
+                    </FacebookShareButton>
+                  ) : null}
+                </p>
+              </>
+            );
+          })}
         </Typography>
-        <Button variant="contained" sx={{ margin: "2%", width: "90%" }}>
+        <Button
+          variant="contained"
+          sx={{ margin: "2%", width: "90%" }}
+          onClick={handleShare}
+        >
           Share
         </Button>
       </Card>

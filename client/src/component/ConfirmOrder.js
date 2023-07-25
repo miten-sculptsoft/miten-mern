@@ -9,6 +9,10 @@ import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import banner from "../assets/Soluxy-banner.png";
 import background from "../assets/background.png";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import TwitterIcon from "@mui/icons-material/Twitter";
 
 const ConfirmOrder = () => {
   const location = useLocation();
@@ -110,7 +114,6 @@ const ConfirmOrder = () => {
               Next
             </Button>
           </div>
-
           <div>
             <div style={{ width: "100%" }}>
               <Card
@@ -186,9 +189,21 @@ const ConfirmOrder = () => {
                 <Typography variant="h5" sx={{ margin: "5%" }}>
                   Let's Connect
                 </Typography>
-                <Typography variant="h7" sx={{ mb: 2 }}>
+                <Typography
+                  variant="h7"
+                  sx={{ mb: 2, display: "flex", gap: "10px" }}
+                >
                   &nbsp;&nbsp;&nbsp;
-                  {reviewData?.Social_Media}
+                  {reviewData?.Social_Media?.map((val) => {
+                    return (
+                      <>
+                        <p>{val === "Facebook" ? <FacebookIcon /> : null}</p>
+                        <p>{val === "Instagram" ? <InstagramIcon /> : null}</p>
+                        <p>{val === "Twitter" ? <TwitterIcon /> : null}</p>
+                        <p>{val === "Youtube" ? <YouTubeIcon /> : null}</p>
+                      </>
+                    );
+                  })}
                 </Typography>
                 <Button variant="contained" sx={{ margin: "2%", width: "90%" }}>
                   Share

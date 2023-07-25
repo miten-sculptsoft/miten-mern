@@ -17,6 +17,7 @@ import ConfirmOrder from "./component/ConfirmOrder";
 import PaymentSuccess from "./component/PaymentSuccess";
 import EditeCard from "./component/EditeCard";
 import ViewCard from "./component/ViewCard";
+import ShareCard from "./component/ShareCard";
 
 function App() {
   const theme = createTheme({
@@ -37,6 +38,7 @@ function App() {
           <Route path="/add" element={<CreateeCard />} />
           <Route path="/edit/:name/:id" element={<EditeCard />} />
           <Route path="/view/:name/:id" element={<ViewCard />} />
+          <Route path="/share" element={<ShareCard />} />
           <Route path="/billing" element={<Billing />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/confirm-order" element={<ConfirmOrder />} />
