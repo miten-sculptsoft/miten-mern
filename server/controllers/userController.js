@@ -6,7 +6,7 @@ const config = require("../config");
 const eCard = require("../models/cardModel");
 const dotenv = require("dotenv");
 const stripe = require("stripe")(
-  "sk_test_51NVZ0BSBIRkMM4U402jqIwNpGWpqZrSKGPya5Q4NbsWxlC7ge7gTSRhFnIbKIDbj2NerfzRWd0oUmkA5YYqiddKf00YrqCV88Z"
+  "sk_test_51NVZ0BSBIRkMM4U482xVY8I0RIN9PfZnPkZn8s6PI5YnFvk7Y2W9N7odYuJln7inCcU9RlaCh1inA0rbTUlGuVT300E9ZK7pqV"
 );
 const { v4: uuidv4 } = require("uuid");
 
@@ -410,6 +410,18 @@ const update_card = async (req, res) => {
   }
 };
 
+const one_user = async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const user = await eCard.findOne({ _id });
+    if (user) {
+      res.status(200).send({ data: user });
+    }
+  } catch (error) {
+    res.status(400).send({ err: error.message });
+  }
+};
+
 module.exports = {
   register_user,
   login_user,
@@ -423,4 +435,5 @@ module.exports = {
   edit_card,
   update_card,
   user_eCard,
+  one_user,
 };

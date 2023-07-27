@@ -1,41 +1,65 @@
+import React, { useEffect, useState } from "react";
+import ViewCard from "./ViewCard";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button, Card, CardContent, Typography } from "@mui/material";
-import React, { useState } from "react";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import EmailIcon from "@mui/icons-material/Email";
 import LanguageIcon from "@mui/icons-material/Language";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import banner from "../assets/Soluxy-banner.png";
 import background from "../assets/background.png";
-import { useLocation, useNavigate } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import QRCode from "qrcode";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
-const ViewCard = () => {
-  const location = useLocation();
+const CardOnly = () => {
+  const params = useParams();
+  console.log(params.id);
   const navigate = useNavigate();
-  const [viewCardData, setViewCardData] = useState(location.state);
+  const [cardviewData, setCardViewData] = useState("");
 
   const [url, seturl] = useState(
-    `https://localhost:3000/card/${viewCardData.Full_name}/${viewCardData._id}`
+    `https://localhost:3000/card/${cardviewData.Full_name}/${cardviewData._id}`
   );
-
-  console.log(viewCardData);
 
   function handleShare() {
     QRCode.toDataURL(url, (err, url) => {
       if (err) return console.error(err);
 
       console.log(url);
-      navigate("/share", { state: [url, viewCardData] });
+      navigate("/share", { state: [url, cardviewData] });
     });
   }
 
+  const auth = async () => {
+    try {
+      const res = await fetch(`/user-eCard/${params.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await res.json();
+      setCardViewData(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(cardviewData);
+
+  function handleSave() {}
+
+  useEffect(() => {
+    auth();
+  }, []);
+
   return (
     <div style={{ width: 320 }}>
-      <Card sx={{ backgroundColor: viewCardData.newColor }}>
+      <Card sx={{ backgroundColor: cardviewData.newColor }}>
         <CardContent>
           <Typography variant="body2" color="text.secondary">
             <img src={background} alt="no" width="280" />
@@ -47,46 +71,50 @@ const ViewCard = () => {
           </Typography>
         </CardContent>
         <Typography variant="h5" sx={{ margin: "3%" }}>
-          {viewCardData.Full_name}
+          {cardviewData.Full_name}
         </Typography>
         <Typography variant="h7" sx={{ padding: "3%", color: "#1815e7d9" }}>
-          {viewCardData.Job_title}
+          {cardviewData.Job_title}
         </Typography>
         <br />
         <Typography variant="h6" sx={{ margin: "3%" }}>
-          {viewCardData.Company_name}
+          {cardviewData.Company_name}
         </Typography>
         <br />
-        <Typography variant="h7">{viewCardData.Bio}</Typography>
+        <Typography variant="h7">{cardviewData.Bio}</Typography>
         <br />
         <br />
         <LocalPhoneIcon sx={{ color: "#1815e7d9", margin: "-6px", ml: 2 }} />
         <Typography variant="h7" sx={{ mb: 2 }}>
           &nbsp;&nbsp;&nbsp;
-          {viewCardData.Phone_number}
+          {cardviewData.Phone_number}
         </Typography>
         <br />
         <br />
         <EmailIcon sx={{ color: "#1815e7d9", margin: "-6px", ml: 2 }} />
         <Typography variant="h7" sx={{ mb: 2 }}>
           &nbsp;&nbsp;&nbsp;
-          {viewCardData.Email}
+          {cardviewData.Email}
         </Typography>
         <br />
         <br />
         <LanguageIcon sx={{ color: "#1815e7d9", margin: "-6px", ml: 2 }} />
         <Typography variant="h7" sx={{ mb: 2 }}>
           &nbsp;&nbsp;&nbsp;
-          {viewCardData.Website}
+          {cardviewData.Website}
         </Typography>
         <br />
         <br />
         <LocationOnIcon sx={{ color: "#1815e7d9", margin: "-6px", ml: 2 }} />
         <Typography variant="h7" sx={{ mb: 3 }}>
           &nbsp;&nbsp;&nbsp;
-          {viewCardData.Address}
+          {cardviewData.Address}
         </Typography>
-        <Button variant="contained" sx={{ margin: "4%", width: "90%" }}>
+        <Button
+          variant="contained"
+          sx={{ margin: "4%", width: "90%" }}
+          onClick={handleSave}
+        >
           Save Contact
         </Button>
         <CardContent>
@@ -112,7 +140,7 @@ const ViewCard = () => {
         </Typography>
         <Typography variant="h7" sx={{ mb: 2, display: "flex", gap: "10px" }}>
           &nbsp;&nbsp;&nbsp;
-          {viewCardData.Social_Media.map((val) => {
+          {cardviewData?.Social_Media?.map((val) => {
             return (
               <>
                 <p>
@@ -170,4 +198,4 @@ const ViewCard = () => {
   );
 };
 
-export default ViewCard;
+export default CardOnly;

@@ -18,6 +18,7 @@ import PaymentSuccess from "./component/PaymentSuccess";
 import EditeCard from "./component/EditeCard";
 import ViewCard from "./component/ViewCard";
 import ShareCard from "./component/ShareCard";
+import CardOnly from "./component/CardOnly";
 
 function App() {
   const theme = createTheme({
@@ -44,6 +45,7 @@ function App() {
           <Route path="/confirm-order" element={<ConfirmOrder />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
+        <Route path="/card/:name/:id" element={<CardOnly />} />
       </Routes>
       <ToastContainer />
     </ThemeProvider>

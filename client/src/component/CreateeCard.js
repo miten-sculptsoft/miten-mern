@@ -27,6 +27,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 const CreateeCard = () => {
   // const [color, setColor] = React.useState("");
@@ -367,12 +369,12 @@ const CreateeCard = () => {
               value={eCardData.Social_Media}
               onChange={handleChange}
               label="Select Social Media"
-              sx={{ width: { sm: 400 }, p: 1 }}
+              sx={{ width: { sm: 400 } }}
             >
               <MenuItem value={"Facebook"}>Facebook</MenuItem>
               <MenuItem value={"Instagram"}>Instagram</MenuItem>
-              <MenuItem value={"Twitter"}>Twitter</MenuItem>
-              <MenuItem value={"Youtube"}>Youtube</MenuItem>
+              <MenuItem value={"Linkedin"}>Linkedin</MenuItem>
+              <MenuItem value={"Whatsapp"}>Whatsapp</MenuItem>
 
               {/* {icons.map((val) => {
                 return (
@@ -484,8 +486,8 @@ const CreateeCard = () => {
                   <>
                     <p>{val === "Facebook" ? <FacebookIcon /> : null}</p>
                     <p>{val === "Instagram" ? <InstagramIcon /> : null}</p>
-                    <p>{val === "Twitter" ? <TwitterIcon /> : null}</p>
-                    <p>{val === "Youtube" ? <YouTubeIcon /> : null}</p>
+                    <p>{val === "Linkedin" ? <LinkedInIcon /> : null}</p>
+                    <p>{val === "Whatsapp" ? <WhatsAppIcon /> : null}</p>
                   </>
                 );
               })}

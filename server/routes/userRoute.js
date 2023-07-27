@@ -23,6 +23,8 @@ user_Route.post(
 );
 user_Route.get("/user-dashboard", auth, UserController.Nav_dashboard);
 user_Route.get("/user-eCard", auth, UserController.user_eCard);
+user_Route.get("/user-eCard/:id", auth, UserController.one_user);
+
 user_Route.get("/logout", auth, UserController.logout);
 user_Route.post("/payment", auth, UserController.payment);
 user_Route.post(
